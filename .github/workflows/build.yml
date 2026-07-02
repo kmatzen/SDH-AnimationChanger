@@ -1,0 +1,57 @@
+name: Build and Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --no-frozen-lockfile
+
+      - name: Build frontend
+        run: pnpm run build
+
+      - name: Package plugin
+        run: |
+          PLUGIN_NAME="$(python3 -c "import json;print(json.load(open('plugin.json'))['name'])")"
+          OUT="$GITHUB_WORKSPACE/release/$PLUGIN_NAME"
+          mkdir -p "$OUT/dist"
+          cp -r dist/index.js "$OUT/dist/"
+          cp main.py plugin.json package.json requirements.txt LICENSE README.md "$OUT/"
+          cp -r assets "$OUT/"
+          cd "$GITHUB_WORKSPACE/release"
+          zip -r "$GITHUB_WORKSPACE/Animation-Changer.zip" "$PLUGIN_NAME"
+
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: Animation-Changer
+          path: Animation-Changer.zip
+
+      - name: Publish release
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: Animation-Changer.zip
+          generate_release_notes: true
