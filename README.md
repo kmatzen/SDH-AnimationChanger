@@ -4,24 +4,11 @@ on boot.
 
 ![screenshot](./assets/screenshot.png)
 
-> This is a fork of [TheLogicMaster/SDH-AnimationChanger](https://github.com/TheLogicMaster/SDH-AnimationChanger)
-> with a few backend bug fixes and automated release packaging.
-
-## Installation (Custom URL)
-In Decky's plugin store, open the settings (gear icon), enable Developer mode, and use
-**Install from URL** with the zip attached to the [latest release](https://github.com/kmatzen/SDH-AnimationChanger/releases/latest):
-
-```
-https://github.com/kmatzen/SDH-AnimationChanger/releases/latest/download/Animation-Changer.zip
-```
-
-After installing, reboot or reload Decky plugins.
-
 ## Plugin Usage
 Use the plugin's animations browser to automatically browser and install animations from
 [SteamDeckRepo](https://steamdeckrepo.com/). For now, only boot animations are available automatically. 
 From the quick access menu, you can switch between animations or enable randomization on boot.
-Ensure that the Startup Movie is set to `deck_startup.webm` in the Settings Customization tab for
+Ensure that the Startup Movie is set to `deck_startup.web` in the Settings Customization tab for
 the custom animation to take effect.
 
 ## Fullscreen Suspend Animations
