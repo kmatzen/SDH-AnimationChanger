@@ -84,7 +84,10 @@ async def regenerate_downloads():
     downloads = []
     if len(animation_cache) == 0:
         await update_cache()
-    for file in os.listdir():
+    if not os.path.isdir(DOWNLOADS_PATH):
+        config['downloads'] = downloads
+        return
+    for file in os.listdir(DOWNLOADS_PATH):
         if not file.endswith('.webm'):
             continue
         anim_id = file[:-5]
@@ -323,13 +326,13 @@ class Plugin:
         try:
             for entry in local_sets:
                 if entry['id'] == set_id:
-                    entry['enable'] = enable
-                    with open(f'{ANIMATIONS_PATH}/{entry["name"]}/config.json', 'w') as f:
+                    entry['enabled'] = enable
+                    with open(f'{ANIMATIONS_PATH}/{entry["id"]}/config.json', 'w') as f:
                         json.dump(entry, f)
                     return
             for entry in config['custom_sets']:
                 if entry['id'] == set_id:
-                    entry['enable'] = enable
+                    entry['enabled'] = enable
                     save_config()
                     break
         except Exception as e:
@@ -387,7 +390,7 @@ class Plugin:
                     return
             async with aiohttp.ClientSession(connector=TCPConnector(family=socket.AF_INET) if config['force_ipv4'] else None) as web:
                 if (anim := find_cached_animation(anim_id)) is None:
-                    raise_and_log(f'Failed to find cached animation with id: {id}')
+                    raise_and_log(f'Failed to find cached animation with id: {anim_id}')
                 async with web.get(anim['download_url'], ssl=ssl_ctx) as response:
                     if response.status != 200:
                         raise_and_log(f'Invalid download request status: {response.status}')
