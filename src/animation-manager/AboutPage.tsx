@@ -10,7 +10,7 @@ export const AboutPage: FC = () => {
         Info
       </h2>
       <span>
-        Ensure that the Startup Movie is set to deck_startup.web in the Settings Customization tab.
+        Ensure that the Startup Movie is set to deck_startup.webm in the Settings Customization tab.
         <br/>
         Select animations in the quick access menu and they should immediately take effect.
         <br/>
